@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	 <data>
+        <!-- Creamos la vista de formulario -->
+        <!--  record dice que vamos a grabar -->
+	 	<record id="openacademy_estudent_form" model="ir.ui.view">
+	 		<field name="name">openacademy.estudent.form</field>
+            <!-- Nombre del modelo -->
+	 		<field name="model">openacademy.student</field>
+            <field name="type">form</field>
+            	<field name="arch" type="xml">
+                   <form string="Estudiantes">
+                       <header>
+                       	  <button name="confirm" string="Confirmar" states="draft" type="object" />
+                       	  <button name="cancel" string="Cancelar" states="draft,confirmed" type="object"/>
+                       	  <button name="draft" string="Borrador" states="cancel" type="object"/>
+                          <field name="state" widget="statusbar" />
+                       </header>
+                       <sheet>	
+                        <group col="4"> <!-- colspan/col -->
+                           <field name="name"/>
+                           <field name="fecha"/>
+                           <field name="edad"/>
+                           <field name="escuela_id" domain="[('school','=',True')]" widget="selection"/>
+                           <field name="active"/>
+                        </group>
+                        <!-- El notebook hace la simulacion de un libro -->
+                        <notebook>
+                        	 <page string="Horario de Clases">
+                                  <field name="horario_ids">
+                                  	 <tree string="Horario de Clases" editable="bottom"> <!-- editable="bottom" evita que abra una ventana -->
+                                  	 	<field name="name"/>
+                                  	 	<field name="horario"/>
+                                  	 </tree>	
+                                  </field>	
+                        	 </page>	
+                        </notebook>	
+
+                       </sheet>
+                   </form>                             	
+                </field>
+	    </record>
+
+        <!-- Creamos la vista de Arbol -->
+        <record id="openacademy_estudent_tree" model="ir.ui.view">
+            <field name="name">openacademy.student.tree</field>
+            <!-- Nombre del modelo -->
+            <field name="model">openacademy.student</field>
+            <field name="type">tree</field>
+                <field name="arch" type="xml">
+                   <tree string="Estudiantes">
+                           <field name="name"/>
+                           <field name="fecha"/>
+                           <field name="edad"/>
+                   </tree>                              
+                </field>
+        </record>
+
+
+        <!--  Definimos los eventos -->
+        <record id="openacademy_estudent_action" model="ir.actions.act_window">
+            <field name="name">Estudiantes</field>
+            <field name="res_model">openacademy.student</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!--  Declaramos los menu -->
+        <menuitem id="openacademy_student_menu" name="Open Academy" sequence="10"/>
+        <menuitem id="submenu_openacademy_student_menu" name="Estudiantes" sequence="10" parent="openacademy_student_menu"/>
+        <menuitem id="submenu_openacademy_student_action" name="Estudiantes" sequence="10" parent="submenu_openacademy_student_menu" action="openacademy_estudent_action"/>
+        
+
+        <!-- Herencia  -->
+        <record id="inherit_respartner_school_id" model="ir.ui.view">
+            <field name="name">res.partner.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                           <field name="website" position="after" > <!-- after/before/inside/replace-->
+                               <field name="school" />
+                           </field>
+            </field>
+        </record>
+
+
+     </data>
+</openerp>
